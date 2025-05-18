@@ -3,17 +3,48 @@ name: Simulación CI/CD
 on:
   push:
     branches:
-      - main
+      - main  # Este flujo se ejecutará cuando hagas un push a la rama 'main'
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build_and_push:
+    runs-on: ubuntu-latest  # El flujo se ejecutará en una máquina con Ubuntu
 
     steps:
-      - uses: actions/checkout@v3
+      # Paso 1: Checkout del código (obtenemos el código fuente del repositorio)
+      - name: Checkout code
+        uses: actions/checkout@v3  # Este paso revisa tu código en el repositorio
 
-      - name: Simular paso de construcción
-        run: echo "Construyendo proyecto simulación servicio menú"
+      # Paso 2: Login en Docker Hub
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2  # Se usa para loguearse en Docker Hub
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}  # Nombre de usuario de Docker Hub
+          password: ${{ secrets.DOCKER_PASSWORD }}  # Contraseña de Docker Hub (o token)
 
-      - name: Simular paso de despliegue
-        run: echo "Desplegando proyecto simulación servicio menú"
+      # Paso 3: Construcción y subida de la imagen Docker
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4  # Usamos esta acción para construir y subir la imagen
+        with:
+          push: true  # Asegura que se suba la imagen a Docker Hub
+          tags: ${{ secrets.DOCKER_USERNAME }}/servicio-menu-web-simulacion:latest  # Asegúrate de poner tu nombre de usuario Docker Hub
+          
+  deploy_to_digitalocean:
+    runs-on: ubuntu-latest  # El flujo se ejecutará en una máquina con Ubuntu
+
+    steps:
+      # Paso 1: Checkout del código nuevamente
+      - name: Checkout code
+        uses: actions/checkout@v3  # Este paso revisa tu código en el repositorio
+
+      # Paso 2: Despliegue a Digital Ocean App Platform
+      - name: Deploy to Digital Ocean App Platform
+        run: |
+          # Instalamos doctl (CLI de Digital Ocean)
+          curl -sSL https://github.com/digitalocean/doctl/releases/download/v1.91.0/doctl-1.91.0-linux-amd64.tar.gz | tar xzv
+          sudo mv doctl /usr/local/bin
+
+          # Autenticación con tu token de Digital Ocean (guardado como secret)
+          doctl auth init -t ${{ secrets.DO_TOKEN }}  # Autenticación con tu token de Digital Ocean
+
+          # Despliegue de la aplicación usando .do/app.yaml (reemplaza si usas otro archivo de configuración)
+          doctl apps create --spec .do/app.yaml  # Despliegue en Digital Ocean usando .do/app.yaml
