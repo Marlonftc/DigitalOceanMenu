@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest  # El flujo se ejecutará en una máquina con Ubuntu
 
     steps:
-      # Paso 1: Checkout del código (obtenemos el código fuente del repositorio)
+      # Paso 1: Checkout del código
       - name: Checkout code
         uses: actions/checkout@v3  # Este paso revisa tu código en el repositorio
 
@@ -21,30 +21,27 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}  # Nombre de usuario de Docker Hub
           password: ${{ secrets.DOCKER_PASSWORD }}  # Contraseña de Docker Hub (o token)
 
-      # Paso 3: Construcción y subida de la imagen Docker
+      # Paso 3: Construcción y subida de Docker image
       - name: Build and push Docker image
         uses: docker/build-push-action@v4  # Usamos esta acción para construir y subir la imagen
         with:
+          context: .  # Apunta a la raíz del proyecto donde está el Dockerfile
           push: true  # Asegura que se suba la imagen a Docker Hub
-          tags: ${{ secrets.DOCKER_USERNAME }}/servicio-menu-web-simulacion:latest  # Asegúrate de poner tu nombre de usuario Docker Hub
+          tags: ${{ secrets.DOCKER_USERNAME }}/servicio-menu-web-simulacion:latest  # Reemplaza con tu nombre de usuario Docker Hub
           
   deploy_to_digitalocean:
     runs-on: ubuntu-latest  # El flujo se ejecutará en una máquina con Ubuntu
 
     steps:
-      # Paso 1: Checkout del código nuevamente
+      # Paso 1: Checkout del código
       - name: Checkout code
         uses: actions/checkout@v3  # Este paso revisa tu código en el repositorio
 
       # Paso 2: Despliegue a Digital Ocean App Platform
       - name: Deploy to Digital Ocean App Platform
         run: |
-          # Instalamos doctl (CLI de Digital Ocean)
           curl -sSL https://github.com/digitalocean/doctl/releases/download/v1.91.0/doctl-1.91.0-linux-amd64.tar.gz | tar xzv
           sudo mv doctl /usr/local/bin
-
-          # Autenticación con tu token de Digital Ocean (guardado como secret)
           doctl auth init -t ${{ secrets.DO_TOKEN }}  # Autenticación con tu token de Digital Ocean
-
-          # Despliegue de la aplicación usando .do/app.yaml (reemplaza si usas otro archivo de configuración)
           doctl apps create --spec .do/app.yaml  # Despliegue en Digital Ocean usando .do/app.yaml
+
