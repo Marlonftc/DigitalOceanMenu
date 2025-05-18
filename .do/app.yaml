@@ -1,0 +1,6 @@
+name: servicio-menu-web-simulacion  # Nombre de la aplicación
+services:
+  - name: web  # Nombre del servicio
+    docker:
+      image: ${DOCKER_USERNAME}/servicio-menu-web-simulacion:latest  # Imagen Docker de Docker Hub
+      port: 80  # Puerto en el que escuchará la aplicación (Nginx escucha en el puerto 80)
