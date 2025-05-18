@@ -1,7 +1,13 @@
-name: servicio-menu-web-simulacion  # Nombre de la aplicación
+name: servicio-menu-web-simulacion
+
 services:
-  - name: servicio-menu-web  # Nombre del servicio
-    image: mftc2412/servicio-menu-web-simulacion:latest  # Imagen en Docker Hub
+  - name: servicio-menu-web
+    image:
+      registry_type: DOCKER_HUB
+      registry: docker.io
+      repository: mftc2412/servicio-menu-web-simulacion
+      tag: latest
     envs:
       - key: PORT
         value: "80"
+
