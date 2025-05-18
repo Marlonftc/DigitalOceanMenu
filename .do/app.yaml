@@ -1,10 +1,7 @@
-\name: servicio-menu-web-simulacion  # Nombre de la aplicación
+name: servicio-menu-web-simulacion  # Nombre de la aplicación
 services:
   - name: servicio-menu-web  # Nombre del servicio
-    image: tuUsuarioDockerHub/servicio-menu-web-simulacion:latest  # Imagen Docker de Docker Hub (reemplaza tuUsuarioDockerHub por tu nombre de usuario real)
+    image: mftc2412/servicio-menu-web-simulacion:latest  # Imagen en Docker Hub
     envs:
       - key: PORT
-        value: "80"  # Puerto en el que la aplicación escuchará
-
-
-
+        value: "80"
