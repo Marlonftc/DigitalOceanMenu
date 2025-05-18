@@ -3,23 +3,22 @@ name: Simulación CI/CD
 on:
   push:
     branches:
-      - main  # Este flujo se ejecutará cuando hagas un push a la rama 'main'
+      - main
 
 jobs:
   build_and_push:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout code
         uses: actions/checkout@v3
+
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-          
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
@@ -31,14 +30,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout code
         uses: actions/checkout@v3
+
       - name: Deploy to Digital Ocean App Platform
         run: |
           curl -sSL https://github.com/digitalocean/doctl/releases/download/v1.91.0/doctl-1.91.0-linux-amd64.tar.gz | tar xzv
           sudo mv doctl /usr/local/bin
           doctl auth init -t ${{ secrets.DO_TOKEN }}
 
-          # Actualización de app ya creada
-          doctl apps update 63a1933c-fa96-4542-9ee2-b37cf6f2d2f7 --spec .do/app.yaml
+          # APP_ID correcto de whale-app
+          doctl apps update 63a1933c-fa96-4542-9ee2-b37cf6f2d27f --spec .do/app.yaml
