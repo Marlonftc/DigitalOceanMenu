@@ -1,6 +1,6 @@
 \name: servicio-menu-web-simulacion  # Nombre de la aplicación
 services:
-  - name: web  # Nombre del servicio
+  - name: servicio-menu-web  # Nombre del servicio
     image: tuUsuarioDockerHub/servicio-menu-web-simulacion:latest  # Imagen Docker de Docker Hub (reemplaza tuUsuarioDockerHub por tu nombre de usuario real)
     envs:
       - key: PORT
