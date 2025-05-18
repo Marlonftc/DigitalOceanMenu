@@ -1,8 +1,10 @@
-name: servicio-menu-web-simulacion  # Nombre de la aplicación en Digital Ocean App Platform
+\name: servicio-menu-web-simulacion  # Nombre de la aplicación
 services:
   - name: web  # Nombre del servicio
-    image: ${DOCKER_USERNAME}/servicio-menu-web-simulacion:latest  # Imagen Docker de Docker Hub
+    image: tuUsuarioDockerHub/servicio-menu-web-simulacion:latest  # Imagen Docker de Docker Hub (reemplaza tuUsuarioDockerHub por tu nombre de usuario real)
     envs:
       - key: PORT
-        value: "80"  # Puerto en el que la aplicación estará escuchando
+        value: "80"  # Puerto en el que la aplicación escuchará
+
+
 
